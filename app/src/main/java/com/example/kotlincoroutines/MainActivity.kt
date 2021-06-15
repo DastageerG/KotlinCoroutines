@@ -44,16 +44,21 @@ class MainActivity : AppCompatActivity()
         {
             binding.buttonGet.isEnabled = false
 
-            getReputationFromUser(binding.editText.text.toString())
-            binding.editText.text.clear()
-            binding.buttonGet.isEnabled =true
+            CoroutineScope(Dispatchers.Main).launch()
+            {
+                getReputationFromUser(binding.editText.text.toString())
+                binding.editText.text.clear()
+                binding.buttonGet.isEnabled =true
+            }
+
         }
 
     }
-        fun getReputationFromUser(toString: String)
+      suspend  fun getReputationFromUser(toString: String)
     {
         val  reputation =  GetReputationEndpoint().getReputation(toString)
         Toast.makeText(this,""+reputation,Toast.LENGTH_SHORT).show()
     }
+
 }
 
