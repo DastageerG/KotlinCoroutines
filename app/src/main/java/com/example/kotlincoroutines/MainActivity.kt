@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity()
         return withContext(Dispatchers.Default)
         {
             GetReputationEndpoint().getReputation(toString)
-        }
+        } //
     } // func closed
 
     override fun onStop()
