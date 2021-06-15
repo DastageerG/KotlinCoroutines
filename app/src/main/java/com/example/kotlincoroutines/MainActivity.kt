@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity()
 
             CoroutineScope(Dispatchers.Main).launch()
             {
-                getReputationFromUser(binding.editText.text.toString())
+                val reputation = getReputationFromUser(binding.editText.text.toString())
+                Toast.makeText(applicationContext,""+reputation,Toast.LENGTH_SHORT).show()
                 binding.editText.text.clear()
                 binding.buttonGet.isEnabled =true
             }
@@ -54,10 +55,12 @@ class MainActivity : AppCompatActivity()
         }
 
     }
-      suspend  fun getReputationFromUser(toString: String)
+      suspend  fun getReputationFromUser(toString: String) :Int
     {
-        val  reputation =  GetReputationEndpoint().getReputation(toString)
-        Toast.makeText(this,""+reputation,Toast.LENGTH_SHORT).show()
+        return withContext(Dispatchers.Default)
+        {
+            GetReputationEndpoint().getReputation(toString)
+        }
     }
 
 }
