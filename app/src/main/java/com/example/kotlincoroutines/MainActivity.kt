@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity()
     val TAG = "1234"
 
     lateinit var binding: ActivityMainBinding
-    private var job:Job? = null
+    private  var coroutineScope:CoroutineScope = CoroutineScope(Dispatchers.Main)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity()
         {
             binding.buttonGet.isEnabled = false
 
-            job = CoroutineScope(Dispatchers.Main).launch()
+            coroutineScope.launch()
             {
                 val reputation = getReputationFromUser(binding.editText.text.toString())
                 Toast.makeText(applicationContext,""+reputation,Toast.LENGTH_SHORT).show()
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity()
     override fun onStop()
     {
         super.onStop()
-        job?.cancel()
+        coroutineScope.coroutineContext.cancelChildren()
         binding.buttonGet.isEnabled =true
     }
 
