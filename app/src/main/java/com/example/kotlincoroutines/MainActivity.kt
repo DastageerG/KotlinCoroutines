@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity()
 
     lateinit var binding: ActivityMainBinding
     private  var coroutineScope:CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private var elapsedTimeJob:Job? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -45,12 +48,26 @@ class MainActivity : AppCompatActivity()
         {
             binding.buttonGet.isEnabled = false
 
+
+            elapsedTimeJob = coroutineScope.launch ()
+            {
+
+                val startTime = System.nanoTime()
+                while (true)
+                {
+                    delay(1000)
+                    val elapsedTime = System.nanoTime() - startTime
+                    val elapsedTimeInMillis = elapsedTime/1000000
+                    binding.textView.text = "elapsedTime : "+elapsedTimeInMillis
+                } // while closed
+            } /// elapsedTimeJob
             coroutineScope.launch()
             {
                 val reputation = getReputationFromUser(binding.editText.text.toString())
                 Toast.makeText(applicationContext,""+reputation,Toast.LENGTH_SHORT).show()
                 binding.editText.text.clear()
                 binding.buttonGet.isEnabled =true
+                elapsedTimeJob?.cancel()
             }
 
         }
